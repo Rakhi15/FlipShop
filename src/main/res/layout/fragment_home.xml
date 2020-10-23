@@ -38,6 +38,7 @@
         android:layout_marginLeft="20dp"
         android:textSize="20dp"
         android:textColor="@android:color/black"
+        android:visibility="invisible"
         />
 
     <Button
@@ -48,5 +49,37 @@
         android:layout_below="@id/message"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:visibility="invisible"
         />
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:id="@+id/offer_card"
+        android:layout_below="@id/relLayout">
+
+        <com.denzcoskun.imageslider.ImageSlider
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageSlider"
+            app:auto_cycle="true"
+            app:delay="0"
+            app:period="1200"
+            app:corner_radius="5">
+
+        </com.denzcoskun.imageslider.ImageSlider>
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+
 </RelativeLayout>
