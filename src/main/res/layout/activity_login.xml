@@ -202,6 +202,19 @@
             />
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Are you a Admin"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/linear3"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:onClick="openAdminLogin"
+        />
 
 
 </RelativeLayout>

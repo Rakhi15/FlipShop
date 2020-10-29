@@ -54,6 +54,7 @@
                             android:id="@+id/cat1"
                             android:background="@drawable/ic_baseline_add_to_photos_24"
                             android:layout_column="1"
+                            android:onClick="openAdminCatAdd"
                             />
                         <Button
                             android:layout_width="60dp"

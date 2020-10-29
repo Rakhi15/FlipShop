@@ -58,7 +58,7 @@ public class AdminLoginActivity extends AppCompatActivity {
 
                 if (!TextUtils.isEmpty(uname) && !TextUtils.isEmpty(upass)) {
 
-                    docRef = firebaseFirestore.collection("users").document(uname);
+                    docRef=firebaseFirestore.collection("admin").document(uname);
 
                     if (!(docRef == null)) {
                         docRef.addSnapshotListener(AdminLoginActivity.this, new EventListener<DocumentSnapshot>() {
@@ -67,7 +67,7 @@ public class AdminLoginActivity extends AppCompatActivity {
                                 String acct_password = value.getString("Password");
                                 if (upass.equals(acct_password)) {
                                     Toast.makeText(AdminLoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(AdminLoginActivity.this, HomeActivity.class);
+                                    Intent intent = new Intent(AdminLoginActivity.this, AdminDashActivity.class);
                                     intent.putExtra("uname", value.getString("Name"));
                                     intent.putExtra("uemail", value.getString("Email"));
                                     startActivity(intent);
