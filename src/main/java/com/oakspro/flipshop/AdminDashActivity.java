@@ -19,4 +19,9 @@ public class AdminDashActivity extends AppCompatActivity {
         Intent intent=new Intent(AdminDashActivity.this, AdminCategoryAdd.class);
         startActivity(intent);
     }
+
+    public void openAddProduct(View view) {
+        Intent intent=new Intent(AdminDashActivity.this, AddProductActivity.class);
+        startActivity(intent);
+    }
 }

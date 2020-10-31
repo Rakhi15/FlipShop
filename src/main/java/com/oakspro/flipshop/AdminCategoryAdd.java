@@ -123,7 +123,8 @@ public class AdminCategoryAdd extends AppCompatActivity {
 
                             Toast.makeText(AdminCategoryAdd.this, "Category Updated", Toast.LENGTH_SHORT).show();
                             CategoryUpload upload=new CategoryUpload(category_name_ed.getText().toString().trim(), taskSnapshot.getUploadSessionUri().toString());
-                            String uploadId=databaseReference.push().getKey();
+                           // String uploadId=databaseReference.push().getKey();
+                            String uploadId=category_name_ed.getText().toString();
                             databaseReference.child(uploadId).setValue(upload);
                             progressDialog.dismiss();
 
