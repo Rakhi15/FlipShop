@@ -48,6 +48,8 @@ public class AdminCategoryAdd extends AppCompatActivity {
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     ProgressDialog progressDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

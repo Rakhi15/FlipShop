@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/linearNew"
                 android:orientation="vertical"
-                android:visibility="invisible">
+                android:visibility="visible">
 
             <EditText
                 android:layout_width="match_parent"
@@ -170,6 +170,7 @@
                     android:layout_height="100dp"
                     android:id="@+id/pick_pic"
                     android:background="@drawable/ic_baseline_camera_alt_24"
+                    android:onClick="getPics"
                     />
                 <ImageView
                     android:layout_width="100dp"
@@ -201,6 +202,7 @@
                     android:id="@+id/pick_pic_pht1"
                     android:background="@drawable/ic_baseline_camera_alt_24"
                     android:layout_margin="7dp"
+                    android:onClick="getPics"
                     />
                 <Button
                     android:layout_width="100dp"
@@ -208,6 +210,7 @@
                     android:id="@+id/pick_pic_pht2"
                     android:layout_margin="7dp"
                     android:background="@drawable/ic_baseline_camera_alt_24"
+                    android:onClick="getPics"
                     />
                 <Button
                     android:layout_width="100dp"
@@ -215,6 +218,7 @@
                     android:id="@+id/pick_pic_pht3"
                     android:layout_margin="7dp"
                     android:background="@drawable/ic_baseline_camera_alt_24"
+                    android:onClick="getPics"
                     />
 
 
