@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -20,10 +21,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,7 +42,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class AdminCategoryAdd extends AppCompatActivity {
@@ -44,8 +54,9 @@ public class AdminCategoryAdd extends AppCompatActivity {
     ImageView loadedimg;
     EditText category_name_ed;
     private Uri imageUri;
-
-    private StorageReference storageReference;
+    String imageurl, newimg, downloadUrl;
+    private StorageReference storageReference, storeref;
+    private FirebaseStorage storage=FirebaseStorage.getInstance();
     private DatabaseReference databaseReference;
     ProgressDialog progressDialog;
 
@@ -65,8 +76,9 @@ public class AdminCategoryAdd extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        storageReference= FirebaseStorage.getInstance().getReference("Category_img");
-        databaseReference= FirebaseDatabase.getInstance().getReference("Category_img");
+        storageReference= FirebaseStorage.getInstance().getReference().child("Category_img");
+
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("Category_img");
 
 
             pick_img.setOnClickListener(new View.OnClickListener() {
@@ -116,34 +128,67 @@ public class AdminCategoryAdd extends AppCompatActivity {
 
         progressDialog.show();
         if (imageUri !=null){
-            StorageReference filereference=storageReference.child(System.currentTimeMillis()+"."+fileExt(imageUri));
 
-            filereference.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            imageurl=System.currentTimeMillis()+"."+fileExt(imageUri);
+            final StorageReference filereference=storageReference.child(imageurl);
+
+            final UploadTask uploadTask=filereference.putFile(imageUri);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    String message = e.toString();
+                    Toast.makeText(AdminCategoryAdd.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(AdminCategoryAdd.this, "Product Image uploaded Successfully...", Toast.LENGTH_SHORT).show();
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful())
+                            {
+                                throw task.getException();
+                            }
 
-                            Toast.makeText(AdminCategoryAdd.this, "Category Updated", Toast.LENGTH_SHORT).show();
-                            CategoryUpload upload=new CategoryUpload(category_name_ed.getText().toString().trim(), taskSnapshot.getUploadSessionUri().toString());
-                           // String uploadId=databaseReference.push().getKey();
-                            String uploadId=category_name_ed.getText().toString();
-                            databaseReference.child(uploadId).setValue(upload);
-                            progressDialog.dismiss();
-
+                            downloadUrl = filereference.getDownloadUrl().toString();
+                            return filereference.getDownloadUrl();
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AdminCategoryAdd.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful())
+                            {
+                                downloadUrl = task.getResult().toString();
+
+                                Toast.makeText(AdminCategoryAdd.this, "got the Category image Url Successfully...", Toast.LENGTH_SHORT).show();
+
+                                sendData();
+                            }
                         }
                     });
+                }
+            });
         }
         else {
             Toast.makeText(AdminCategoryAdd.this, "No Picture Selected", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         }
+    }
+
+    private void sendData() {
+
+       // storeref=storage.getReferenceFromUrl("gs://flipshop-48732.appspot.com/Category_img").child(imageurl);
+
+                    CategoryUpload upload=new CategoryUpload(category_name_ed.getText().toString().trim(), downloadUrl);
+                    // String uploadId=databaseReference.push().getKey();
+                    String uploadId=category_name_ed.getText().toString();
+                    databaseReference.child(uploadId).setValue(upload);
+                    progressDialog.dismiss();
+
+
+
     }
 
     @Override

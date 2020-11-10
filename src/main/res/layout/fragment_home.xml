@@ -72,6 +72,14 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/offer_card"
+        android:id="@+id/recyclerView"
+        />
+
 
 
 </RelativeLayout>

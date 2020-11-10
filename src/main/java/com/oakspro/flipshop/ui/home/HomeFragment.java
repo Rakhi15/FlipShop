@@ -2,6 +2,7 @@ package com.oakspro.flipshop.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.oakspro.flipshop.Category;
+import com.oakspro.flipshop.HolderCategory;
 import com.oakspro.flipshop.HomeActivity;
 import com.oakspro.flipshop.LoginActivity;
 import com.oakspro.flipshop.R;
@@ -25,6 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+
+    RecyclerView recyclerView;
+    DatabaseReference ref;
+    FirebaseDatabase database;
 
     Button logoutBtn;
     FirebaseAuth mAuth;
@@ -35,6 +48,10 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
 
+        //instance
+
+        database=FirebaseDatabase.getInstance();
+        ref=database.getReference("Category_img");
 
         logoutBtn=root.findViewById(R.id.logoutLink);
         message=root.findViewById(R.id.message);
@@ -58,6 +75,11 @@ public class HomeFragment extends Fragment {
         //offer slider
 
         ImageSlider slider=root.findViewById(R.id.imageSlider);
+        recyclerView=root.findViewById(R.id.recyclerView);
+
+        LinearLayoutManager managerCategory=new LinearLayoutManager(getContext());
+        managerCategory.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(managerCategory);
 
         List<SlideModel> slideModels=new ArrayList<>();
         slideModels.add(new SlideModel("https://www.coupondunia.in/blog/wp-content/uploads/2017/08/Amazon-and-FK-Sale_1200-x-628-2-1050x550.jpg"));
@@ -68,7 +90,34 @@ public class HomeFragment extends Fragment {
         slideModels.add(new SlideModel("https://images.indianexpress.com/2020/10/Untitled-design-2020-10-15T171350.830.jpg"));
         slider.setImageList(slideModels, true);
 
-
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FirebaseRecyclerOptions<Category> options=new FirebaseRecyclerOptions.Builder<Category>()
+                .setQuery(ref, Category.class)
+                .build();
+
+        FirebaseRecyclerAdapter<Category, HolderCategory> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<Category, HolderCategory>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull HolderCategory holder, int position, @NonNull Category model) {
+
+                holder.setView(getContext(), model.getcName(), model.getcImageUri());
+                Log.i("TAG", model.getcName());
+            }
+
+            @NonNull
+            @Override
+            public HolderCategory onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_recyclerview_category, parent, false);
+                return new HolderCategory(view);
+            }
+        };
+        firebaseRecyclerAdapter.startListening();
+        recyclerView.setAdapter(firebaseRecyclerAdapter);
+
     }
 }
