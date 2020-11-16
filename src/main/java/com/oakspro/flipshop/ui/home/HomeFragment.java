@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -78,6 +79,8 @@ public class HomeFragment extends Fragment {
         recyclerView=root.findViewById(R.id.recyclerView);
 
         LinearLayoutManager managerCategory=new LinearLayoutManager(getContext());
+
+
         managerCategory.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(managerCategory);
 
