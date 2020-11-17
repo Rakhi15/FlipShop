@@ -3,14 +3,14 @@ package com.oakspro.flipshop;
 import android.text.TextUtils;
 
 public class ProductUpload {
-    private String brand, name, mrp, price, description, stock, color, size, category;
+    private String brand, name, mrp, price, description, stock, color, size, category, key;
     private String cImageUri1, cImageUri2, cImageUri3, cImageUri4;
 
     public ProductUpload() {
 
     }
 
-    public ProductUpload(String category, String brand, String name, String mrp, String price, String description, String stock, String color, String size, String cImageUri1, String cImageUri2, String cImageUri3, String cImageUri4) {
+    public ProductUpload(String key,String category, String brand, String name, String mrp, String price, String description, String stock, String color, String size, String cImageUri1, String cImageUri2, String cImageUri3, String cImageUri4) {
 
         if (TextUtils.isEmpty(category)){
             this.category="no category";
@@ -52,6 +52,15 @@ public class ProductUpload {
         this.cImageUri3 = cImageUri3;
         this.cImageUri4 = cImageUri4;
         this.category=category;
+        this.key=key;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getBrand() {

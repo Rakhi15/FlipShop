@@ -411,9 +411,11 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
     private void ProductData(String scategory, String sbrand, String sname, String smrp, String sprice, String ssize, String sstock, String scolor, String sdescription, String imguri1, String imguri2, String imguri3, String imguri4) {
-       ProductUpload upload=new ProductUpload(scategory, sbrand, sname, smrp, sprice, sdescription, sstock, scolor, ssize, imguri1, imguri2, imguri3, imguri4);
-        // String uploadId=databaseReference.push().getKey();
-        String uploadId=sname;
+        String uploadId=dr.push().getKey();
+
+       ProductUpload upload=new ProductUpload(uploadId, scategory, sbrand, sname, smrp, sprice, sdescription, sstock, scolor, ssize, imguri1, imguri2, imguri3, imguri4);
+
+        //String uploadId=sname;
         dr.child(uploadId).setValue(upload);
         progressDialog.dismiss();
         Toast.makeText(getApplicationContext(), "All Done", Toast.LENGTH_SHORT).show();

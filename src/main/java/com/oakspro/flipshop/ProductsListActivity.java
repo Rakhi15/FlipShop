@@ -69,7 +69,12 @@ public class ProductsListActivity extends AppCompatActivity {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(),model.getName(),Toast.LENGTH_LONG).show();
+                      Toast.makeText(getApplicationContext(),model.getKey(),Toast.LENGTH_LONG).show();
+                      Intent intent_product=new Intent(ProductsListActivity.this, ProductDetailsActivity.class);
+                        intent_product.putExtra("pid", model.getKey().toString());
+                        startActivity(intent_product);
+
+
 
 
 

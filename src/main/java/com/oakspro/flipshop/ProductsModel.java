@@ -1,11 +1,19 @@
 package com.oakspro.flipshop;
 
 public class ProductsModel {
-    String name, cImageUri1, mrp, price;
+    String name, cImageUri1, mrp, price, key;
 
 
     public ProductsModel(){
 
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {
