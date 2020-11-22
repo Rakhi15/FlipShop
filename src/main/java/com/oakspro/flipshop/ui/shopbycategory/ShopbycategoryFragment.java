@@ -64,6 +64,7 @@ public class ShopbycategoryFragment extends Fragment {
 
                         Intent pIntent=new Intent(getContext(), ProductsListActivity.class);
                         pIntent.putExtra("pName", model.getcName());
+                        pIntent.putExtra("uemail", getActivity().getIntent().getStringExtra("uemail").toString());
                         startActivity(pIntent);
                     }
                 });

@@ -28,6 +28,7 @@ public class ProductsListActivity extends AppCompatActivity {
     FirebaseDatabase database;
     ProgressDialog progressDialog;
     Query query;
+    String uemail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class ProductsListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(sm);
 
         pName=getIntent().getStringExtra("pName").toString();
+        uemail=getIntent().getStringExtra("uemail").toString();
 
         query=FirebaseDatabase.getInstance().getReference("Products").orderByChild("category").equalTo(pName);
 
@@ -72,6 +74,7 @@ public class ProductsListActivity extends AppCompatActivity {
                       Toast.makeText(getApplicationContext(),model.getKey(),Toast.LENGTH_LONG).show();
                       Intent intent_product=new Intent(ProductsListActivity.this, ProductDetailsActivity.class);
                         intent_product.putExtra("pid", model.getKey().toString());
+                        intent_product.putExtra("uemail", uemail);
                         startActivity(intent_product);
 
 

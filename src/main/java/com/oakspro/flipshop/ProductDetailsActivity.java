@@ -2,12 +2,16 @@ package com.oakspro.flipshop;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,18 +20,26 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class ProductDetailsActivity extends AppCompatActivity {
 
     String key;
 
+    ViewPager productView;
     DatabaseReference ref;
     FirebaseDatabase database;
+    private DatabaseReference databaseReference;
     ProgressDialog progressDialog;
     Query query;
+    Button addCart;
+
+    static ArrayList<String> imagesall=new ArrayList<String>();
 
     private String brand, name, mrp, price, description,color, size, category, skey;
     private Integer stock;
     private String cImageUri1, cImageUri2, cImageUri3, cImageUri4;
+    private String uemail;
 
     TextView pmrp, pprice, pname, pcolor, pbrand, pdesc, psize, stockav;
 
@@ -44,8 +56,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         pdesc=findViewById(R.id.description_txt);
         psize=findViewById(R.id.size_txt);
         stockav=findViewById(R.id.stock);
+        addCart=findViewById(R.id.cart);
 
-
+       productView=findViewById(R.id.viewPager);
 
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Please Wait");
@@ -55,6 +68,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         progressDialog.show();
 
         key=getIntent().getStringExtra("pid").toString();
+        uemail=getIntent().getStringExtra("uemail").toString();
+
+        imagesall.clear();
 
        // query=FirebaseDatabase.getInstance().getReference("Products").orderByChild("key").equalTo(key);
 
@@ -80,6 +96,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 cImageUri3=snapshot.child("cImageUri3").getValue().toString();
                 cImageUri4=snapshot.child("cImageUri4").getValue().toString();
 
+                imagesall.add(cImageUri2);
+                imagesall.add(cImageUri3);
+                imagesall.add(cImageUri4);
+
                 ArrangeData();
             }
 
@@ -88,6 +108,28 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
         });
+
+
+        addCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog.show();
+                addCartProgram();
+            }
+        });
+
+
+    }
+
+    private void addCartProgram() {
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("CartAll");
+        String uploadId=databaseReference.push().getKey();
+
+        AddCartModel add=new AddCartModel(uemail, skey, name, cImageUri1, price, uploadId);
+        databaseReference.child(uploadId).setValue(add);
+        Toast.makeText(this, ""+name+" added to cart", Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
+
     }
 
 
@@ -109,6 +151,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
             stockav.setTextColor(Color.RED);
             stockav.setText("OUT OF STOCK");
         }
+
+        ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(this);
+        productView.setAdapter(viewPagerAdapter);
+
+
         progressDialog.dismiss();
 
     }
