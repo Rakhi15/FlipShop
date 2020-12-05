@@ -24,4 +24,9 @@ public class AdminDashActivity extends AppCompatActivity {
         Intent intent=new Intent(AdminDashActivity.this, AddProductActivity.class);
         startActivity(intent);
     }
+
+    public void openOrders(View view) {
+        Intent intent=new Intent(AdminDashActivity.this, AdminOrderConfirmation.class);
+        startActivity(intent);
+    }
 }

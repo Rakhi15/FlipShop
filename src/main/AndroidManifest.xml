@@ -20,6 +20,7 @@
         <activity android:name=".AdminSignupActivity" />
         <activity android:name=".AdminDashActivity" />
         <activity android:name=".AdminLoginActivity" />
+        <activity android:name=".AdminOrderConfirmation" />
         <activity
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
@@ -34,6 +35,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7998636286313318~8183022440"/>
 
         <meta-data
             android:name="preloaded_fonts"

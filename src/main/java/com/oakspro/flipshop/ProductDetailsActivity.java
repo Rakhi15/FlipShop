@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -159,4 +160,32 @@ public class ProductDetailsActivity extends AppCompatActivity {
         progressDialog.dismiss();
 
     }
+
+    public void wishlist(View view) {
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("Wishlist");
+        String uploadId=databaseReference.push().getKey();
+
+        WishlistModel add=new WishlistModel(uemail, skey, name, cImageUri1, price, uploadId);
+        databaseReference.child(uploadId).setValue(add);
+        //wishlist.setBackgroundColor(Color.parseColor("#FF0000"));
+        Toast.makeText(this, ""+name+" added to wishlist", Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
+
+    }
+
+    public void buynow(View view) {
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("Orders");
+        String uploadId=databaseReference.push().getKey();
+        String ostatus="0";
+        OrdersModel add=new OrdersModel(uemail, skey, name, cImageUri1, price, uploadId, ostatus);
+        databaseReference.child(uploadId).setValue(add);
+        Intent i=new Intent(this,AdminOrderConfirmation.class);
+        i.putExtra("productname",name);
+        i.putExtra("productimage",cImageUri1);
+
+
+        Toast.makeText(this, ""+name+" added to Orders", Toast.LENGTH_SHORT).show();
+    }
+
+
 }

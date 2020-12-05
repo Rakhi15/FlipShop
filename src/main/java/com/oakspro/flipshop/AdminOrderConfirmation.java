@@ -1,45 +1,39 @@
-package com.oakspro.flipshop.ui.orders;
+package com.oakspro.flipshop;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.oakspro.flipshop.OrdersAdapter;
-import com.oakspro.flipshop.OrdersModel;
-import com.oakspro.flipshop.R;
+import com.squareup.picasso.Picasso;
 
-public class OrdersFragment extends Fragment {
-
-
+public class AdminOrderConfirmation extends AppCompatActivity {
 
     RecyclerView ordersRecycler;
-    OrdersAdapter adapter;
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    AdminOrderConfirmationAdapter adapter;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_order_confirmation);
+        ordersRecycler=(RecyclerView)findViewById(R.id.recyclerView11);
 
-        View root = inflater.inflate(R.layout.fragment_orders, container, false);
-        ordersRecycler=(RecyclerView)root.findViewById(R.id.recyclerView11);
-
-        ordersRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        ordersRecycler.setLayoutManager(new LinearLayoutManager(this));
         firebaseOperation();
-        return root;
     }
+
     private void firebaseOperation() {
         Query query= FirebaseDatabase.getInstance().getReference().child("Orders");
 
         FirebaseRecyclerOptions<OrdersModel> options=new FirebaseRecyclerOptions.Builder<OrdersModel>()
                 .setQuery(query, OrdersModel.class)
                 .build();
-        adapter=new OrdersAdapter(options);
+        adapter=new AdminOrderConfirmationAdapter(options);
         ordersRecycler.setAdapter(adapter);
     }
     @Override

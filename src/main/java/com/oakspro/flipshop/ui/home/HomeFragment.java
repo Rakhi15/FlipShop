@@ -2,11 +2,14 @@ package com.oakspro.flipshop.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +25,12 @@ import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -43,6 +52,10 @@ public class HomeFragment extends Fragment {
     Button logoutBtn;
     FirebaseAuth mAuth;
     TextView message;
+
+    private AdView adsv;
+    private FrameLayout frameLayoutAds;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -56,6 +69,13 @@ public class HomeFragment extends Fragment {
 
         logoutBtn=root.findViewById(R.id.logoutLink);
         message=root.findViewById(R.id.message);
+        frameLayoutAds=root.findViewById(R.id.ads_frame);
+
+        adsv=new AdView(getContext());
+        adsv.setAdUnitId(getString(R.string.admob_id));
+        frameLayoutAds.addView(adsv);
+        getAdBanners();
+        loadMobileAds();
 
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +104,7 @@ public class HomeFragment extends Fragment {
         managerCategory.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(managerCategory);
 
+        String[] images_link;
         List<SlideModel> slideModels=new ArrayList<>();
         slideModels.add(new SlideModel("https://www.coupondunia.in/blog/wp-content/uploads/2017/08/Amazon-and-FK-Sale_1200-x-628-2-1050x550.jpg"));
         slideModels.add(new SlideModel("https://static.digit.in/default/9fc7020964bccbda38991ecf2779ce8e075f12a6.jpeg"));
@@ -94,6 +115,37 @@ public class HomeFragment extends Fragment {
         slider.setImageList(slideModels, true);
 
         return root;
+    }
+
+    private void loadMobileAds() {
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+
+    }
+
+    private void getAdBanners() {
+
+        AdRequest adRequest=new AdRequest.Builder().build();
+        AdSize adSizenew=getSetSize();
+        adsv.setAdSize(adSizenew);
+        adsv.loadAd(adRequest);
+    }
+
+    private AdSize getSetSize() {
+
+        Display display=getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics displayMetrics=new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+
+        float width=displayMetrics.widthPixels;
+        float density=displayMetrics.density;
+        int adwidth=(int)(width/density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getContext(), adwidth);
+
     }
 
     @Override

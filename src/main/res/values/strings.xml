@@ -18,4 +18,6 @@
     <string name="menu_shopbycategory">Shop by Category</string>
     <string name="menu_orders">Orders</string>
     <string name="menu_Account">Account</string>
+
+    <string name="admob_id">ca-app-pub-7998636286313318/6870968445</string>
 </resources>
