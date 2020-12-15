@@ -8,10 +8,11 @@ public class OrdersModel {
     private String pPrice;
     private String pOrderkey;
     private String oStatus;
+    private String oNotification;
 public OrdersModel(){
 
   }
-    public OrdersModel(String userID, String productID, String productName, String pImage, String pPrice, String pOrderkey, String oStatus) {
+    public OrdersModel(String userID, String productID, String productName, String pImage, String pPrice, String pOrderkey, String oStatus, String oNotification) {
         this.userID = userID;
         this.productID = productID;
         this.productName = productName;
@@ -19,6 +20,7 @@ public OrdersModel(){
         this.pPrice = pPrice;
         this.pOrderkey = pOrderkey;
         this.oStatus=oStatus;
+        this.oNotification=oNotification;
     }
 
     public String getUserID() {
@@ -75,5 +77,13 @@ public OrdersModel(){
 
     public void setoStatus(String oStatus) {
         this.oStatus = oStatus;
+    }
+
+    public String getoNotification() {
+        return oNotification;
+    }
+
+    public void setoNotification(String oNotification) {
+        this.oNotification = oNotification;
     }
 }

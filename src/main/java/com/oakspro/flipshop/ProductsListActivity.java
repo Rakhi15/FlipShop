@@ -76,11 +76,6 @@ public class ProductsListActivity extends AppCompatActivity {
                         intent_product.putExtra("pid", model.getKey().toString());
                         intent_product.putExtra("uemail", uemail);
                         startActivity(intent_product);
-
-
-
-
-
                     }
                 });
             }

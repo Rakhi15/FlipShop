@@ -22,10 +22,10 @@ public class AdminOrderConfirmation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_order_confirmation);
         ordersRecycler=(RecyclerView)findViewById(R.id.recyclerView11);
-
         ordersRecycler.setLayoutManager(new LinearLayoutManager(this));
         firebaseOperation();
     }
+
 
     private void firebaseOperation() {
         Query query= FirebaseDatabase.getInstance().getReference().child("Orders");
@@ -39,12 +39,21 @@ public class AdminOrderConfirmation extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        adapter.notifyDataSetChanged();
         adapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        adapter.notifyDataSetChanged();
         adapter.stopListening();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        adapter.startListening();
     }
 }

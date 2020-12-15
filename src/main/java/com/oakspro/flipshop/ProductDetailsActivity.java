@@ -126,6 +126,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         databaseReference= FirebaseDatabase.getInstance().getReference().child("CartAll");
         String uploadId=databaseReference.push().getKey();
 
+
         AddCartModel add=new AddCartModel(uemail, skey, name, cImageUri1, price, uploadId);
         databaseReference.child(uploadId).setValue(add);
         Toast.makeText(this, ""+name+" added to cart", Toast.LENGTH_SHORT).show();
@@ -177,7 +178,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Orders");
         String uploadId=databaseReference.push().getKey();
         String ostatus="0";
-        OrdersModel add=new OrdersModel(uemail, skey, name, cImageUri1, price, uploadId, ostatus);
+        String oNotifi="0";
+        OrdersModel add=new OrdersModel(uemail, skey, name, cImageUri1, price, uploadId, ostatus, oNotifi);
         databaseReference.child(uploadId).setValue(add);
         Intent i=new Intent(this,AdminOrderConfirmation.class);
         i.putExtra("productname",name);

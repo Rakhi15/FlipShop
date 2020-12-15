@@ -25,6 +25,7 @@ public class DashboardActivity extends AppCompatActivity {
     Button logoutBtn;
     FirebaseAuth mAuth;
     TextView uname;
+    String email;
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -36,8 +37,10 @@ public class DashboardActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         String name=getIntent().getStringExtra("uname").toString();
-        String email=getIntent().getStringExtra("uemail").toString();
+        email=getIntent().getStringExtra("uemail").toString();
   //      logoutBtn=findViewById(R.id.logoutLink);
+
+        startNotifications();
 
         View newview=getLayoutInflater().inflate(R.layout.nav_header_main,null, true);
         uname=newview.findViewById(R.id.user_name);
@@ -46,11 +49,6 @@ public class DashboardActivity extends AppCompatActivity {
 
 
 //        uname.setText(name);
-
-
-
-
-
 
 
         setSupportActionBar(toolbar);
@@ -88,4 +86,12 @@ public class DashboardActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    private void startNotifications() {
+        Intent serviceIntent=new Intent(this, ServiceController.class);
+        serviceIntent.putExtra("input", email);
+        startService(serviceIntent);
+    }
+
+
 }
